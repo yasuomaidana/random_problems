@@ -2,7 +2,7 @@ import sys
 import heapq
 from math import sqrt
 
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 
 def read_world_from_file(filename):
@@ -95,25 +95,61 @@ def path_cost(grid, path):
     Returns:
     int: The cost of the path.
     """
+    if not path:
+        return -1
     cost = 0
     for i, j in path:
         cost += grid[i][j]
     return cost
 
+def world_string(filename):
+    """
+    Reads the world from a file and returns the grid and the start and end positions.
+
+    Args:
+    filename (str): The name of the file containing the world.
+
+    Returns:
+    grid (list of lists): A 2D list representing the grid.
+    start (tuple): The position of the start cell.
+    end (tuple): The position of the end cell.
+    """
+    with open(filename, 'r') as f:
+        M = int(f.readline())
+        N = int(f.readline())
+        grid = []
+        for i in range(M):
+            row = f.readline().split(",")
+            grid_row = []
+            for j, cell in enumerate(row):
+                if cell == '-2':
+                    grid_row.append(-2)
+                elif cell == '-3':
+                    grid_row.append(-3)
+                elif cell == '-1':
+                    grid_row.append(-1)
+                else:
+                    grid_row.append(int(cell))
+            grid.append(grid_row)
+    return grid
+
+
 
 if __name__ == "__main__":
-    world, start_i, end_i = read_world_from_file("world/world_easy.txt")
 
+    world, start_i, end_i = read_world_from_file("world/world_easy3.txt")
+    world_string = world_string("world/world_easy3.txt")
     print("World:", world)
+    print("World string:", world_string)
     print("Start:", start_i)
     print("End:", end_i)
     min_path_cost, min_path  = a_star(world, start_i, end_i)
     print("Minimum path a*:", min_path)
     print("Path:", min_path_cost)
-    print("Path cost:", path_cost(world, min_path))
 
-    # plt.imshow(world, cmap='hot', interpolation='nearest')
-    # plt.imshow(world, cmap='hot', interpolation='nearest')
-    # path_y, path_x = zip(*min_path)
-    # plt.scatter(path_x, path_y, c='blue', marker='o')
-    # plt.show()
+    if min_path_cost == -1:
+        exit(1)
+    plt.imshow(world_string, cmap='hot', interpolation='nearest')
+    path_y, path_x = zip(*min_path)
+    plt.scatter(path_x, path_y, c='blue', marker='o')
+    plt.show()
