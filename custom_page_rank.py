@@ -1,5 +1,10 @@
 import numpy as np
 
+
+"""
+You own a pizza franchise and struggle to decide where to place the next store. You already have the data related to the sales by places and their interconnections. Considering their indirect and direct implications, you must determine where to place the next store.
+You have a weighted adjacent matrix representing the route score between two places and a vector representing each place's market value. You want to locate your next store in a high-connectivity area with a high market value.
+"""
 def modified_pagerank_linalg(adjacency_matrix, node_values, damping_factor=0.85, node_value_factor=0.15, max_iterations=100, tolerance=1e-6):
     """
     Calculates PageRank using linear algebra for efficiency.
